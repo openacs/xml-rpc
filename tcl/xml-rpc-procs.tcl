@@ -59,7 +59,7 @@ ad_proc -private xmlrpc::get_content {} {
     # be thread/process safe.  Hence spin till success
     set fp ""
     while {$fp == ""} {
-        set filename "[ns_tmpnam][clock clicks].xmlrpc2"
+        set filename "[ns_tmpnam][clock clicks -milliseconds].xmlrpc2"
         set fp [ns_openexcl $filename]
     }
 
