@@ -196,7 +196,7 @@ proc validate1.manyTypesTest {
     {boolean 0}
     {string wazzup}
     {double 3.14159}
-    {date "20010704T11:50:30"}
+    {date "20010704T11:50:30Z"}
     {base64 "R0lGODlhFgASAJEAAP/////OnM7O/wAAACH5BAEAAAAALAAAAAAWABIAAAJAhI+py40zDIzujEDBzW0n74AaFGChqZUYylyYq7ILXJJ1BU95l6r23RrRYhyL5jiJAT/Ink8WTPoqHx31im0UAAA7"}
 } {
     return [xmlrpc::remote_call $url validator1.manyTypesTest \
