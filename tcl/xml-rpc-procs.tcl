@@ -529,66 +529,60 @@ ad_proc -private xmlrpc::httppost {
     
     @author Vinod Kurup    
 } {
-    if [catch {
-        if {[incr depth] > 10} {
-            return -code error "xmlrpc::httppost: Recursive redirection: $url"
-        }
-        set req_hdrs [ns_set create]
+    if {[incr depth] > 10} {
+        return -code error "xmlrpc::httppost: Recursive redirection: $url"
+    }
+    set req_hdrs [ns_set create]
 
-        # headers necesary for a post and the form variables
-        ns_set put $req_hdrs Accept "*/*"
-        ns_set put $req_hdrs User-Agent "[ns_info name]-Tcl/[ns_info version]"
-        ns_set put $req_hdrs "Content-type" "text/xml"
-        ns_set put $req_hdrs "Content-length" [string length $content]
+    # headers necesary for a post and the form variables
+    ns_set put $req_hdrs Accept "*/*"
+    ns_set put $req_hdrs User-Agent "[ns_info name]-Tcl/[ns_info version]"
+    ns_set put $req_hdrs "Content-type" "text/xml"
+    ns_set put $req_hdrs "Content-length" [string length $content]
 
-        set http [ns_httpopen POST $url $req_hdrs 30 $content]
-        set rfd [lindex $http 0]
-        set wfd [lindex $http 1]
-        set rpset [lindex $http 2]
+    set http [ns_httpopen POST $url $req_hdrs 30 $content]
+    set rfd [lindex $http 0]
+    set wfd [lindex $http 1]
+    set rpset [lindex $http 2]
 
-        flush $wfd
-        close $wfd
+    flush $wfd
+    close $wfd
 
-        set headers $rpset
-        set response [ns_set name $headers]
-        set status [lindex $response 1]
+    set headers $rpset
+    set response [ns_set name $headers]
+    set status [lindex $response 1]
 
-        # follow 302
-        if {$status == 302} {
-            set location [ns_set iget $headers location]
-            if {$location != ""} {
-                ns_set free $headers
-                close $rfd
-                set page [xmlrpc::httppost -url $location \
-                            -timeout $timeout -depth $depth -content $content]
-            }
-        } else {
-            set length [ns_set iget $headers content-length]
-            if [string match "" $length] {set length -1}
-            set err [catch {
-                while 1 {
-                    set buf [_ns_http_read $timeout $rfd $length]
-                    append page $buf
-                    if [string match "" $buf] break
-                    if {$length > 0} {
-                        incr length -[string length $buf]
-                        if {$length <= 0} break
-                    }
-                }
-            } errMsg]
+    # follow 302
+    if {$status == 302} {
+        set location [ns_set iget $headers location]
+        if {$location != ""} {
             ns_set free $headers
             close $rfd
-            if $err {
-                global errorInfo
-                return -code error -errorinfo $errorInfo $errMsg
-            }
-        }    
-    } errmsg ] {
-        ns_log warning "xmlrpc::httppost error: $errmsg"
-        return -1
+            set page [xmlrpc::httppost -url $location \
+                          -timeout $timeout -depth $depth -content $content]
+        }
     } else {
-        return $page
-    }
+        set length [ns_set iget $headers content-length]
+        if [string match "" $length] {set length -1}
+        set err [catch {
+            while 1 {
+                set buf [_ns_http_read $timeout $rfd $length]
+                append page $buf
+                if [string match "" $buf] break
+                if {$length > 0} {
+                    incr length -[string length $buf]
+                    if {$length <= 0} break
+                }
+            }
+        } errMsg]
+        ns_set free $headers
+        close $rfd
+        if $err {
+            global errorInfo
+            return -code error -errorinfo $errorInfo $errMsg
+        }
+    }    
+    return $page
 }
 
 ad_proc -private xmlrpc::parse_response {xml} {
