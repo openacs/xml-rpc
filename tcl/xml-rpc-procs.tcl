@@ -674,7 +674,8 @@ ad_proc -private xmlrpc::invoke {
         set errno [catch {xmlrpc::invoke_method $method_name $arguments} result]
         if { $errno } {
             set result [xmlrpc::fault $errno $result]
-            ns_log error "xmlrpc_invoke: error in xmlrpc method REQUEST: $xml RESULT: $result"
+	    global errorInfo
+            ns_log error "xmlrpc_invoke: error in xmlrpc method REQUEST: $xml RESULT: $result\n$errorInfo"
         } else {
             # success
             set result [xmlrpc::respond $result]
