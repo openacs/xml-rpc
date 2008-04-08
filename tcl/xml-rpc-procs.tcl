@@ -660,10 +660,12 @@ ad_proc -private xmlrpc::invoke {
 
         set arguments [list]
         set params [xml_node_get_children_by_name $data params]
-        foreach parameter [xml_node_get_children_by_name $params param] {
+	if {$params ne ""} {
+	  foreach parameter [xml_node_get_children_by_name $params param] {
             lappend arguments \
                 [xmlrpc::decode_value [xml_node_get_first_child $parameter]]
-        }
+	  }
+	}
 
         set errno [catch {xmlrpc::invoke_method $method_name $arguments} result]
         if { $errno } {
