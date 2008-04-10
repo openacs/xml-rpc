@@ -58,7 +58,7 @@ ad_proc -private xmlrpc::get_content {} {
     # ns_openexcl can fail, since tmpnam is known not to
     # be thread/process safe.  Hence spin till success
     set fp ""
-    while {$fp == ""} {
+    while {$fp eq ""} {
         set filename "[ns_tmpnam][clock clicks -milliseconds].xmlrpc2"
         set fp [ns_openexcl $filename]
     }
@@ -555,7 +555,7 @@ ad_proc -private xmlrpc::httppost {
     # follow 302
     if {$status == 302} {
         set location [ns_set iget $headers location]
-        if {$location != ""} {
+        if {$location ne ""} {
             ns_set free $headers
             close $rfd
             set page [xmlrpc::httppost -url $location \
@@ -563,12 +563,12 @@ ad_proc -private xmlrpc::httppost {
         }
     } else {
         set length [ns_set iget $headers content-length]
-        if [string match "" $length] {set length -1}
+        if {$length eq ""} {set length -1}
         set err [catch {
-            while 1 {
+            while {1} {
                 set buf [_ns_http_read $timeout $rfd $length]
                 append page $buf
-                if [string match "" $buf] break
+                if {$buf eq ""} break
                 if {$length > 0} {
                     incr length -[string length $buf]
                     if {$length <= 0} break
@@ -577,7 +577,7 @@ ad_proc -private xmlrpc::httppost {
         } errMsg]
         ns_set free $headers
         close $rfd
-        if $err {
+        if {$err} {
             global errorInfo
             return -code error -errorinfo $errorInfo $errMsg
         }
@@ -594,7 +594,7 @@ ad_proc -private xmlrpc::parse_response {xml} {
     set doc [xml_parse -persist $xml]
     set root [xml_doc_get_first_node $doc]
 
-    if { ![string equal [xml_node_get_name $root] "methodResponse"] } {
+    if { [xml_node_get_name $root] ne "methodResponse" } {
         set root_name [xml_node_get_name $root]
         xml_doc_free $doc
         return -code error "xmlrpc::parse_response: invalid server reponse - root node is not methodResponse. it's $root_name"

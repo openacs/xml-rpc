@@ -9,7 +9,7 @@ ad_page_contract {
 } {
 }
 
-if {[string equal [ns_conn method] POST]} {
+if {[ns_conn method] eq "POST"} {
     set content [xmlrpc::get_content]
     ns_return 200 text/xml [xmlrpc::invoke $content]
     return

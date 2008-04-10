@@ -107,7 +107,7 @@ proc validator1.moderateSizeArrayCheck {array} {
 #    while {[info exists bigArray($counter)]} {
 #        incr counter
 #    }
-#    set counter [expr $counter - 1]
+#    set counter [expr {$counter - 1}]
 #    return "-string [list "$bigArray(0)$bigArray($counter)"]"
     return "-string \"[lindex $array 0][lindex $array end]\""
 }
@@ -118,14 +118,14 @@ proc validator1.nestedStructTest {struct} {
     array set 2000 $bigStruct(2000)
     array set April $2000(04)
     array set first $April(01)
-    return "-int [expr $first(larry) + $first(curly) + $first(moe)]"
+    return "-int [expr {$first(larry) + $first(curly) + $first(moe)}]"
 }
 
 
 proc validator1.simpleStructReturnTest {number} {
-    set struct(times10) [list -int [expr $number * 10]]
-    set struct(times100) [list -int [expr $number * 100]]
-    set struct(times1000) [list -int [expr $number * 1000]]
+    set struct(times10) [list -int [expr {$number * 10}]]
+    set struct(times100) [list -int [expr {$number * 100}]]
+    set struct(times1000) [list -int [expr {$number * 1000}]]
 
     return "-struct [list [array get struct]]"
 }
@@ -140,7 +140,7 @@ proc validate1.arrayOfStructsTest {
 {url http://www.theashergroup.com/RPC2}
     {array ""}
 } {
-    if {[string equal "" $array]} {
+    if {$array eq ""} {
         set array [list \
               [list -struct [list moe [list -int 1] \
                                   curly [list -int 2] \
@@ -159,7 +159,7 @@ proc validate1.countTheEntities {
                                  {url http://www.theashergroup.com/RPC2}
                                  {string ""}
                              } {
-    if {[string equal "" $string]} {
+    if {$string eq ""} {
         set string "l'&d>&f&x'>jsua\"&'wmq&'n<t'>k'i<ezc<rv&<&poby&&gh>'"
     }
 
@@ -170,7 +170,7 @@ proc validate1.easyStructTest {
     {url "http://www.theashergroup.com/RPC2"}
     {struct ""}
 } {
-    if {[string equal "" $struct]} {
+    if {$struct eq ""} {
         set struct \
               [list moe [list -int 1] \
                     curly [list -int 2] \
@@ -184,7 +184,7 @@ proc validate1.echoStructTest {
     {url "http://www.theashergroup.com/RPC2"}
     {struct ""}
 } {
-    if {[string equal $struct ""]} {
+    if {$struct eq ""} {
         set struct [list bob [list -int 5]]
     }
     return [xmlrpc::remote_call $url validator1.echoStructTest -struct $struct]
@@ -208,7 +208,7 @@ proc validate1.moderateSizeArrayCheck {
                                        {url http://www.theashergroup.com/RPC2}
                                        {array ""}
                                    } {
-    if {[string equal "" $array]} {
+    if {$array eq ""} {
         set array [list Wisconsin Vermont Utah Idaho Kansas California \
                        Virginia Iowa {New York} Mississippi Maine Delaware \
                        Ohio Washington {West Virginia} Delaware Kentucky \
@@ -267,12 +267,12 @@ proc validate1.nestedStructTest {
                 # exit test (to find end of month)
                 set date \
                         [clock format \
-                          [clock scan "[expr $d - 1] day" \
+                          [clock scan "[expr {$d - 1}] day" \
                             -base [clock scan "$y-${mstr}-01"]] \
                           -format "%y:%m:%d"]
                 set date [split $date :]
                 set reald [lindex $date 2]
-                if {![string equal $reald $dstr]} {
+                if {$reald ne $dstr } {
                     break
                 }
                 
@@ -285,7 +285,7 @@ proc validate1.nestedStructTest {
                 } else {
                     set dayta \
                         [list -struct \
-                           [list moe [list -int [expr 2 * $moe]]]]
+                           [list moe [list -int [expr {2 * $moe}]]]]
                 }
                 set month [concat $month [list $dstr $dayta]]
             }
