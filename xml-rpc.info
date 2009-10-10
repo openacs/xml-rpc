@@ -16,7 +16,7 @@
         <description format="text/plain">This package implements a simple XML-RPC server. It receives XML-RPC calls, decodes the XML and then calls the requested method on the OpenACS server. Code is based on ns_xmlrpc, but now uses tDOM.</description>
 
         <provides url="xml-rpc" version="0.3"/>
-        <requires url="acs-kernel" version="5.3.1a1"/>
+        <requires url="acs-kernel" version="5.5.0"/>
 
         <callbacks>
         </callbacks>
