@@ -72,7 +72,7 @@ ad_proc -private xmlrpc::get_content {} {
         append text [read $fp]
     }
     close $fp
-    ns_unlink $filename
+    file delete $filename
     return $text
 }
 
