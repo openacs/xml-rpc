@@ -1,5 +1,5 @@
 <master>
-<property name="title">XML-RPC Administration</property>
+<property name="doc(title)">XML-RPC Administration</property>
 
 <table>
 <tr>
