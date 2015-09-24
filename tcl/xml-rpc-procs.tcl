@@ -59,7 +59,7 @@ ad_proc -private xmlrpc::get_content {} {
     # be thread/process safe.  Hence spin till success
     set fp ""
     while {$fp eq ""} {
-        set filename "[ns_tmpnam][clock clicks -milliseconds].xmlrpc2"
+        set filename "[ad_tmpnam][clock clicks -milliseconds].xmlrpc2"
         set fp [ns_openexcl $filename]
     }
 
@@ -100,7 +100,7 @@ ad_proc -private xmlrpc::fault {
         </member>
         <member>
           <name>faultString</name>
-          <value><string>[ad_quotehtml $msg]</string></value>
+          <value><string>[ns_quotehtml $msg]</string></value>
         </member>
       </struct>
     </value>
@@ -353,7 +353,7 @@ ad_proc -private xmlrpc::construct {
 
     # if no valid option is specified, treat it as string
     if {[lsearch $options_list [lindex $arglist 0]] == -1} {
-        set value "<string>[ad_quotehtml $arglist]</string>"
+        set value "<string>[ns_quotehtml $arglist]</string>"
         return [xmlrpc::create_context $context $arglist]
     }
 
@@ -367,7 +367,7 @@ ad_proc -private xmlrpc::construct {
         switch -- $option {
             -string -
             -text {
-                set value "<string>[ad_quotehtml $value]</string>"
+                set value "<string>[ns_quotehtml $value]</string>"
                 append result [xmlrpc::create_context $context $value]
             }
 
@@ -428,7 +428,7 @@ ad_proc -private xmlrpc::construct {
             -keyvalue {
                 set data "<struct>" 
                 foreach {name mvalue} $value {
-                    append data "<member><name>[ad_quotehtml $name]</name>"
+                    append data "<member><name>[ns_quotehtml $name]</name>"
                     append data [xmlrpc::construct value $mvalue]
                     append data "</member>"
                 }
