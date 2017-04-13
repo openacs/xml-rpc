@@ -678,7 +678,9 @@ ad_proc -private xmlrpc::invoke {
             ns_log debug "xmlrpc::invoke result $result"
         }
     }
-    xml_doc_free $doc
+    if {[info exists doc]} {
+	xml_doc_free $doc
+    }
 
     return $result
 }
