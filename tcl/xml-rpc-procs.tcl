@@ -645,6 +645,13 @@ ad_proc -private xmlrpc::invoke {
         return $result
     }
 
+    # check that the provided XML is non-empty
+    if { $xml eq "" } {
+        set result [xmlrpc::fault 3 "Empty XML document passed to XML-RPC"]
+        ns_log error "xmlrpc::invoke fault $result"
+        return $result
+    }
+    
     ns_log debug "xmlrpc::invoke REQUEST: $xml"
     if {[catch {set doc [xml_parse -persist $xml]} err_msg]} {
         set result [xmlrpc::fault 1 "error parsing request: $err_msg"]
