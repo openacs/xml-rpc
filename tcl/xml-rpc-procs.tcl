@@ -53,26 +53,35 @@ ad_proc -private xmlrpc::get_content {} {
     @return string - the XML request
     @author Dave Bauer
 } {
-    # (taken from aol30/modules/tcl/form.tcl)
-    # Spool content into a temporary read/write file.
-    # ns_openexcl can fail, since tmpnam is known not to
-    # be thread/process safe.  Hence spin till success
-    set fp ""
-    while {$fp eq ""} {
-        set filename "[ad_tmpnam][clock clicks -milliseconds].xmlrpc2"
-        set fp [ns_openexcl $filename]
-    }
+    if {[ns_info name] eq "NaviServer"} {
+        #
+        # NaviServer provides a generic means to access the content,
+        # indepenent from the spooling configuration
+        #
+        set text [ns_getcontent -as_file false -binary false]
+    } else {
+        
+        # (taken from aol30/modules/tcl/form.tcl)
+        # Spool content into a temporary read/write file.
+        # ns_openexcl can fail, since tmpnam is known not to
+        # be thread/process safe.  Hence spin till success
+        set fp ""
+        while {$fp eq ""} {
+            set filename "[ad_tmpnam][clock clicks -milliseconds].xmlrpc2"
+            set fp [ns_openexcl $filename]
+        }
 
-    fconfigure $fp -translation binary
-    ns_conncptofp $fp
-    close $fp
+        fconfigure $fp -translation binary
+        ns_conncptofp $fp
+        close $fp
 
-    set fp [open $filename r]
-    while {![eof $fp]} {
-        append text [read $fp]
+        set fp [open $filename r]
+        while {![eof $fp]} {
+            append text [read $fp]
+        }
+        close $fp
+        file delete $filename
     }
-    close $fp
-    file delete $filename
     return $text
 }
 
@@ -712,3 +721,10 @@ ad_proc -private xmlrpc::invoke_method {
     set result [uplevel #0 [list $method_name] $arguments]
     return $result
 }
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
