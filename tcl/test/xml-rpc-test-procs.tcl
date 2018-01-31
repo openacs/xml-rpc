@@ -121,7 +121,7 @@ aa_register_case -cats script xml_rpc_construct {
         # int test
         set arglist {-int 33} 
         set result [xmlrpc::construct {} $arglist]
-        aa_equals "int contruction" $result "<i4>33</i4>"
+        aa_equals "int construction" $result "<i4>33</i4>"
 
         # array test
         set arglist {-array {

@@ -56,7 +56,7 @@ ad_proc -private xmlrpc::get_content {} {
     if {[ns_info name] eq "NaviServer"} {
         #
         # NaviServer provides a generic means to access the content,
-        # indepenent from the spooling configuration
+        # independent from the spooling configuration
         #
         set text [ns_getcontent -as_file false -binary false]
     } else {
@@ -543,7 +543,7 @@ ad_proc -private xmlrpc::httppost {
     }
     set req_hdrs [ns_set create]
 
-    # headers necesary for a post and the form variables
+    # headers necessary for a post and the form variables
     ns_set put $req_hdrs Accept "*/*"
     ns_set put $req_hdrs User-Agent "[ns_info name]-Tcl/[ns_info version]"
     ns_set put $req_hdrs "Content-type" "text/xml"
@@ -606,7 +606,7 @@ ad_proc -private xmlrpc::parse_response {xml} {
     if { [xml_node_get_name $root] ne "methodResponse" } {
         set root_name [xml_node_get_name $root]
         xml_doc_free $doc
-        return -code error "xmlrpc::parse_response: invalid server reponse - root node is not methodResponse. it's $root_name"
+        return -code error "xmlrpc::parse_response: invalid server response - root node is not methodResponse. it's $root_name"
     }
     
     set node [xml_node_get_first_child $root]
