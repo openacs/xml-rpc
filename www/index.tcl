@@ -12,7 +12,7 @@ ad_page_contract {
 if {[ns_conn method] eq "POST"} {
     set content [xmlrpc::get_content]
     ns_return 200 text/xml [xmlrpc::invoke $content]
-    return
+    ad_script_abort
 }
 
 # GET requests fall through to index.adp
