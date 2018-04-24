@@ -5,9 +5,9 @@ ad_library {
     Steve Ball and help from Aaron Swartz and Jerry Asher.
     </p>
     <p>
-    Modified by Vinod Kurup to 
+    Modified by Vinod Kurup to
     <ol>
-    <li>Use the xml abstraction procs in 
+    <li>Use the xml abstraction procs in
     packages/acs-tcl/tcl/30-xml-utils-procs.tcl (which use tDom now) </li>
     <li>Fit in OpenACS 5 framework </li>
     </ol>
@@ -31,7 +31,7 @@ ad_proc -public xmlrpc::url {} {
     # ok to use this since this is a singleton package.
     return [apm_package_url_from_key xml-rpc]
 }
-    
+
 ad_proc -public xmlrpc::enabled_p {} {
     @return whether the server is enabled
 } {
@@ -47,7 +47,7 @@ ad_proc -public xmlrpc::list_methods {} {
 }
 
 ad_proc -private xmlrpc::get_content {} {
-    There's no [ns_conn content] so this is a hack to get the content of the 
+    There's no [ns_conn content] so this is a hack to get the content of the
     XML-RPC request. Taken from ns_xmlrpc.
 
     @return string - the XML request
@@ -60,7 +60,7 @@ ad_proc -private xmlrpc::get_content {} {
         #
         set text [ns_getcontent -as_file false -binary false]
     } else {
-        
+
         # (taken from aol30/modules/tcl/form.tcl)
         # Spool content into a temporary read/write file.
         # ns_openexcl can fail, since tmpnam is known not to
@@ -116,7 +116,7 @@ ad_proc -private xmlrpc::fault {
   </fault>
 </methodResponse>
 "
-                        
+
     # now re-parse and then re-extract to make sure it's well formed
     set doc [xml_parse -persist $result]
     if { [catch {xml_doc_render $doc} result] } {
@@ -133,9 +133,9 @@ ad_proc -public xmlrpc::register_proc {
     <p>
     Register a proc to be available via XML-RPC. <code>proc_name</code> is
     the name of a proc that is defined in the usual OpenACS way (i.e. ad_proc).
-    The <code>proc_name</code> is added to the xmlrpc_procs nsv array with a 
-    value of 1. When an XML-RPC call comes in, this array is searched to see 
-    if the proc_name has been registered. Currently, the presence of 
+    The <code>proc_name</code> is added to the xmlrpc_procs nsv array with a
+    value of 1. When an XML-RPC call comes in, this array is searched to see
+    if the proc_name has been registered. Currently, the presence of
     <code>proc_name</code> in the nsv is enough to indicate
     that the proc can be called via XML-RPC. At some point we may allow
     administrators to disable procs, so we could set the value associated
@@ -152,17 +152,17 @@ ad_proc -public xmlrpc::register_proc {
 ad_proc -private xmlrpc::decode_value {
     node
 } {
-    Unpack the data in a value element. Most value elements will have a 
-    subnode describing the datatype (e.g &lt;string> or &lt;int>). If no 
+    Unpack the data in a value element. Most value elements will have a
+    subnode describing the datatype (e.g &lt;string> or &lt;int>). If no
     subnode is present, then we should assume the value is a string.
 
     @param node &lt;value> node that we're decoding
-    @return Returns the contents of the &lt;value> node. If the value is 
-    a &lt;struct> then returns the data in a TCL array. If the value is an 
+    @return Returns the contents of the &lt;value> node. If the value is
+    a &lt;struct> then returns the data in a TCL array. If the value is an
     &lt;array> then returns the data in a TCL list.
 } {
     set result ""
-    if {[llength [xml_node_get_children $node]]} {  
+    if {[llength [xml_node_get_children $node]]} {
         # subnode is specified
         set subnode [xml_node_get_first_child $node]
         set datatype [xml_node_get_name $subnode]
@@ -175,7 +175,7 @@ ad_proc -private xmlrpc::decode_value {
             base64 {
                 set result [xml_node_get_content $subnode]
             }
-            
+
             boolean {
                 set result [string is true [xml_node_get_content $subnode]]
             }
@@ -183,7 +183,7 @@ ad_proc -private xmlrpc::decode_value {
             dateTime.iso8601 {
                 set result [clock scan [xml_node_get_content $subnode]]
             }
-            
+
             struct {
                 foreach member \
                     [xml_node_get_children_by_name $subnode member] {
@@ -205,7 +205,7 @@ ad_proc -private xmlrpc::decode_value {
                     lappend result [xmlrpc::decode_value $entry]
                 }
             }
-            
+
             default {
                 # we received a tag which is not a recognized datatype.
                 ns_log notice xmlrpc::decode_value ignored type: $datatype
@@ -245,13 +245,13 @@ ad_proc -private xmlrpc::construct {
     arglist
 } {
     <p>
-    Construct an XML-RPC element. <code>arglist</code> is a 2-element list 
-    which is converted to XML. The first element of <code>arglist</code> is 
+    Construct an XML-RPC element. <code>arglist</code> is a 2-element list
+    which is converted to XML. The first element of <code>arglist</code> is
     the datatype and the second element is the value.
     </p>
-    Example: 
+    Example:
     <pre>
-    set arglist {-int 33} 
+    set arglist {-int 33}
     set result [xmlrpc::construct {} $arglist]
     set result ==> &lt;i4>33&lt;/i4>
     </pre>
@@ -261,15 +261,15 @@ ad_proc -private xmlrpc::construct {
     arrays and structs. In addition, structs and arrays can contain each
     other.
     </p>
-    Array example: 
+    Array example:
     <pre>
     set arglist {-array {
-        {-int 6682} 
-        {-boolean 0} 
-        {-text Iowa} 
-        {-double 8931.33333333} 
+        {-int 6682}
+        {-boolean 0}
+        {-text Iowa}
+        {-double 8931.33333333}
         {-date {Fri Jan 01 05:41:30 EST 1904}}}}
- 
+
     set result [xmlrpc::construct {} $arglist]
     set result ==>  &lt;array>
                     &lt;data>
@@ -297,10 +297,10 @@ ad_proc -private xmlrpc::construct {
     Struct Example:
     <pre>
     set arglist {-struct {
-        ctLeftAngleBrackets {-int 5} 
-        ctRightAngleBrackets {-int 6} 
-        ctAmpersands {-int 7} 
-        ctApostrophes {-int 0} 
+        ctLeftAngleBrackets {-int 5}
+        ctRightAngleBrackets {-int 6}
+        ctAmpersands {-int 7}
+        ctApostrophes {-int 0}
         ctQuotes {-int 3}}}
 
     set result [xmlrpc::construct {} $arglist]
@@ -356,9 +356,9 @@ ad_proc -private xmlrpc::construct {
     set result ""
     # list of valid options
     set options_list [list "-string" "-text" "-i4" "-int" "-integer" \
-			  "-boolean" "-double" "-date" "-binary" "-base64" \
-			  "-variable" "-structvariable" "-struct" \
-			  "-array" "-keyvalue"]
+        "-boolean" "-double" "-date" "-binary" "-base64" \
+        "-variable" "-structvariable" "-struct" \
+        "-array" "-keyvalue"]
 
     # if no valid option is specified, treat it as string
     if {[lsearch $options_list [lindex $arglist 0]] == -1} {
@@ -371,7 +371,7 @@ ad_proc -private xmlrpc::construct {
         return -code error \
                 "no value for option \"[lindex $arglist end]\""
     }
-    
+
     foreach {option value} $arglist {
         switch -- $option {
             -string -
@@ -411,13 +411,13 @@ ad_proc -private xmlrpc::construct {
                     return -code error \
                         "value \"$value\" for option \"$option\" is not a valid date ($datevalue)"
                 }
-                
+
                 set value "<dateTime.iso8601>$datevalue</dateTime.iso8601>"
                 append result [xmlrpc::create_context $context $value]
             }
 
             -binary -
-            -base64 {                
+            -base64 {
                 # it is up to the application to do the encoding
                 # before the data gets here
                 set value "<base64>$value</base64>"
@@ -432,10 +432,10 @@ ad_proc -private xmlrpc::construct {
                 append data "</data></array>"
                 append result [xmlrpc::create_context $context $data]
             }
-            
+
             -struct -
             -keyvalue {
-                set data "<struct>" 
+                set data "<struct>"
                 foreach {name mvalue} $value {
                     append data "<member><name>[ns_quotehtml $name]</name>"
                     append data [xmlrpc::construct value $mvalue]
@@ -452,7 +452,7 @@ ad_proc -private xmlrpc::construct {
             }
         }
     }
-    
+
     return $result
 }
 
@@ -461,14 +461,14 @@ ad_proc -private xmlrpc::create_context {
     value
 } {
     Return the value wrapped in appropriate context tags. If context is
-    a list of items, then the result will be wrapped in multiple tags. 
+    a list of items, then the result will be wrapped in multiple tags.
     Example:
     <pre>
     xmlrpc::create_context {param value} 78
     returns ==> "<param><value>78</value></param>"
     </pre>
 
-    @param context context to create 
+    @param context context to create
     @param value character data
     @return string with value wrapped in context tags
 } {
@@ -531,12 +531,12 @@ ad_proc -private xmlrpc::httppost {
     -content
 } {
     The proc util_httppost doesn't work for our needs. We need to send
-    Content-type of text/xml and we need to send a Host header. So, roll 
+    Content-type of text/xml and we need to send a Host header. So, roll
     our own XML-RPC HTTP POST. Wait - lars-blogger sends out XML-RPC pings
     to weblogs.com. I'll steal the POST code from there and simplify that
     call.
-    
-    @author Vinod Kurup    
+
+    @author Vinod Kurup
 } {
     if {[incr depth] > 10} {
         return -code error "xmlrpc::httppost: Recursive redirection: $url"
@@ -550,9 +550,7 @@ ad_proc -private xmlrpc::httppost {
     ns_set put $req_hdrs "Content-length" [string length $content]
 
     set http [ns_httpopen POST $url $req_hdrs 30 $content]
-    set rfd [lindex $http 0]
-    set wfd [lindex $http 1]
-    set rpset [lindex $http 2]
+    lassign $http rfd wfd rpset
 
     flush $wfd
     close $wfd
@@ -590,7 +588,7 @@ ad_proc -private xmlrpc::httppost {
             global errorInfo
             return -code error -errorinfo $errorInfo $errMsg
         }
-    }    
+    }
     return $page
 }
 
@@ -598,7 +596,7 @@ ad_proc -private xmlrpc::parse_response {xml} {
     Parse the response from a XML-RPC call.
 
     @param xml the XML response
-    @return result 
+    @return result
 } {
     set doc [xml_parse -persist $xml]
     set root [xml_doc_get_first_node $doc]
@@ -608,7 +606,7 @@ ad_proc -private xmlrpc::parse_response {xml} {
         xml_doc_free $doc
         return -code error "xmlrpc::parse_response: invalid server response - root node is not methodResponse. it's $root_name"
     }
-    
+
     set node [xml_node_get_first_child $root]
     switch -- [xml_node_get_name $node] {
         params {
@@ -660,7 +658,7 @@ ad_proc -private xmlrpc::invoke {
         ns_log error "xmlrpc::invoke fault $result"
         return $result
     }
-    
+
     ns_log debug "xmlrpc::invoke REQUEST: $xml"
     if {[catch {set doc [xml_parse -persist $xml]} err_msg]} {
         set result [xmlrpc::fault 1 "error parsing request: $err_msg"]
@@ -676,17 +674,17 @@ ad_proc -private xmlrpc::invoke {
 
         set arguments [list]
         set params [xml_node_get_children_by_name $data params]
-	if {$params ne ""} {
-	  foreach parameter [xml_node_get_children_by_name $params param] {
-            lappend arguments \
-                [xmlrpc::decode_value [xml_node_get_first_child $parameter]]
-	  }
-	}
+        if {$params ne ""} {
+            foreach parameter [xml_node_get_children_by_name $params param] {
+                lappend arguments \
+                    [xmlrpc::decode_value [xml_node_get_first_child $parameter]]
+            }
+        }
 
         set errno [catch {xmlrpc::invoke_method $method_name $arguments} result]
         if { $errno } {
             set result [xmlrpc::fault $errno $result]
-	    global errorInfo
+            global errorInfo
             ns_log error "xmlrpc_invoke: error in xmlrpc method REQUEST: $xml RESULT: $result\n$errorInfo"
         } else {
             # success
@@ -695,7 +693,7 @@ ad_proc -private xmlrpc::invoke {
         }
     }
     if {[info exists doc]} {
-	xml_doc_free $doc
+        xml_doc_free $doc
     }
 
     return $result
