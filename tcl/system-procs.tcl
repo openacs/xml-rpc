@@ -17,7 +17,7 @@ ad_proc -public system.listMethods {} {
     implemented by the server.
     @author Vinod Kurup
 } {
-    set result [list]
+    set result {}
     foreach proc_name [xmlrpc::list_methods] {
         lappend result [list -string $proc_name]
     }
@@ -66,7 +66,7 @@ ad_proc -public system.multicall {
     standard &lt;fault> element.
     @author Vinod Kurup
 } {
-    set responses [list]
+    set responses {}
 
     foreach call $array {
         # parse the call for methodName and params

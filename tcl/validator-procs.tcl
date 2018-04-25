@@ -255,11 +255,11 @@ proc validate1.nestedStructTest {
     # for each year
     for {set y $startyear} {$y <= $endyear} {incr y} {
 
-        set year [list]
+        set year {}
         # for each month
         for {set m 1} {$m <= 12} {incr m} {
 
-            set month [list]
+            set month {}
             # for each day
             set mstr [format %02d $m]
             for {set d 1} {$d <= 31} {incr d} {
