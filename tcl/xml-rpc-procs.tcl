@@ -19,7 +19,7 @@ ad_library {
 }
 
 # setup nsv array to hold procs that are registered for xml-rpc access
-nsv_array set xmlrpc_procs {}
+nsv_array set xmlrpc_procs [list]
 
 namespace eval xmlrpc {}
 
@@ -672,7 +672,7 @@ ad_proc -private xmlrpc::invoke {
                  [lindex \
                       [xml_node_get_children_by_name $data methodName] 0 ]]
 
-        set arguments {}
+        set arguments [list]
         set params [xml_node_get_children_by_name $data params]
         if {$params ne ""} {
             foreach parameter [xml_node_get_children_by_name $params param] {
