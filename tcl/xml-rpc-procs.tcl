@@ -181,7 +181,7 @@ ad_proc -private xmlrpc::decode_value {
             }
 
             dateTime.iso8601 {
-                set result [clock scan [xml_node_get_content $subnode]]
+                set result [clock scan [string trimright [xml_node_get_content $subnode] Z]]
             }
 
             struct {
@@ -505,7 +505,6 @@ ad_proc -public xmlrpc::remote_call {
         append call [xmlrpc::construct {param value} $args]
     }
     append call "</params></methodCall>"
-
     # now re-parse and then re-extract to make sure it's well formed
     set doc [xml_parse -persist $call]
     if { [catch {xml_doc_render $doc} request] } {
@@ -549,47 +548,22 @@ ad_proc -private xmlrpc::httppost {
     ns_set put $req_hdrs "Content-type" "text/xml"
     ns_set put $req_hdrs "Content-length" [string length $content]
 
-    set http [ns_httpopen POST $url $req_hdrs 30 $content]
-    lassign $http rfd wfd rpset
+    set r [util::http::post -body $content -url $url -headers $req_hdrs]
 
-    flush $wfd
-    close $wfd
-
-    set headers $rpset
-    set response [ns_set name $headers]
-    set status [lindex $response 1]
+    set headers [dict get $r headers]
+    set status [dict get $r status]
 
     # follow 302
     if {$status == 302} {
-        set location [ns_set iget $headers location]
+        set location [expr {[dict exists $headers location] ? [dict get $headers location] : ""}]
         if {$location ne ""} {
             ns_set free $headers
             close $rfd
             set page [xmlrpc::httppost -url $location \
                           -timeout $timeout -depth $depth -content $content]
         }
-    } else {
-        set length [ns_set iget $headers content-length]
-        if {$length eq ""} {set length -1}
-        set err [catch {
-            while {1} {
-                set buf [_ns_http_read $timeout $rfd $length]
-                append page $buf
-                if {$buf eq ""} break
-                if {$length > 0} {
-                    incr length -[string length $buf]
-                    if {$length <= 0} break
-                }
-            }
-        } errMsg]
-        ns_set free $headers
-        close $rfd
-        if {$err} {
-            global errorInfo
-            return -code error -errorinfo $errorInfo $errMsg
-        }
     }
-    return $page
+   return [dict get $r page]
 }
 
 ad_proc -private xmlrpc::parse_response {xml} {
