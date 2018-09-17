@@ -14,8 +14,18 @@ aa_register_case -cats script xml_rpc_mounted {
     }
 }
 
-aa_register_case -cats script xml_rpc_fault {
-    Test the fault generation code
+aa_register_case \
+    -cats script \
+    -procs {
+        xmlrpc::fault
+        xmlrpc::decode_value
+        xml_parse
+        xml_node_get_first_child
+        xml_doc_get_first_node
+        xml_doc_free
+    } \
+    xml_rpc_fault {
+        Test the fault generation code
 } {
     set expected_code 22
     set expected_string "my error message with <b>html</b> codes"
@@ -46,8 +56,14 @@ ad_proc -private xmlrpc_decode_test_prep { value } {
 
 }
 
-aa_register_case -cats script xml_rpc_decode_value {
-    Test xmlrpc::decode_value to be sure it decodes properly
+aa_register_case \
+    -cats script \
+    -procs {
+        xml_parse
+        xmlrpc::decode_value
+    } \
+    xml_rpc_decode_value {
+        Test xmlrpc::decode_value to be sure it decodes properly
 } {
     aa_run_with_teardown -rollback -test_code {
         set result [xmlrpc_decode_test_prep "<string>a string</string>"]
@@ -93,8 +109,18 @@ aa_register_case -cats script xml_rpc_decode_value {
     }
 }
 
-aa_register_case -cats script xml_rpc_respond {
-    Test the response generation code
+aa_register_case \
+    -cats script \
+    -procs {
+        xmlrpc::respond
+        xmlrpc::decode_value
+        xml_parse
+        xml_node_get_first_child
+        xml_doc_get_first_node
+        xml_doc_free
+    } \
+    xml_rpc_respond {
+        Test the response generation code
 } {
     set expected_data "my data"
 
@@ -111,8 +137,11 @@ aa_register_case -cats script xml_rpc_respond {
     }
 }
 
-aa_register_case -cats script xml_rpc_construct {
-    Test the construction code
+aa_register_case \
+    -cats script \
+    -procs xmlrpc::construct \
+    xml_rpc_construct {
+        Test the construction code
 } {
 
     aa_run_with_teardown -rollback -test_code {
