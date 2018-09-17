@@ -32,7 +32,7 @@ aa_register_case \
 
     aa_run_with_teardown -rollback -test_code {
         set result [xmlrpc::fault $expected_code $expected_string]
-        
+
         # extract faultCode and faultString
         set doc [xml_parse -persist $result]
         set value_node [xml_node_get_first_child [xml_node_get_first_child [xml_doc_get_first_node $doc]]]
@@ -44,10 +44,10 @@ aa_register_case \
     }
 }
 
-ad_proc -private xmlrpc_decode_test_prep { value } { 
+ad_proc -private xmlrpc_decode_test_prep { value } {
     Takes the contents of a &lt;value> node, calls xmlrpc::decode_value and
     returns the result. This is done repeatedly in the xml_rpc_decode_value
-    test, so I broke it out into a separate function for that purpose 
+    test, so I broke it out into a separate function for that purpose
 } {
     set doc [xml_parse -persist "<value>$value</value>"]
     set result [xmlrpc::decode_value [xml_doc_get_first_node $doc]]
@@ -71,7 +71,7 @@ aa_register_case \
 
         set result [xmlrpc_decode_test_prep "- a naked string"]
         aa_equals "naked string test" $result "- a naked string"
-        
+
         set result [xmlrpc_decode_test_prep "<int>22</int>"]
         aa_equals "int test" $result 22
 
@@ -96,7 +96,7 @@ aa_register_case \
         aa_equals "struct test 1" $result(id) 19
         aa_equals "struct test 2" $result(content) "My content"
 
-        unset result 
+        unset result
         set result [xmlrpc_decode_test_prep "<array><data><value>phrase 1</value><value>2nd phrase</value><value>final phrase</value></data></array>"]
         aa_equals "array test 1" [lindex $result 0] "phrase 1"
         aa_equals "array test 2" [lindex $result 1] "2nd phrase"
@@ -126,7 +126,7 @@ aa_register_case \
 
     aa_run_with_teardown -rollback -test_code {
         set result [xmlrpc::respond $expected_data]
-        
+
         # extract data
         set doc [xml_parse -persist $result]
         set value_node [xml_node_get_first_child [xml_node_get_first_child [xml_node_get_first_child [xml_doc_get_first_node $doc]]]]
@@ -148,29 +148,29 @@ aa_register_case \
         # use testcases from the ad_proc documentation
 
         # int test
-        set arglist {-int 33} 
+        set arglist {-int 33}
         set result [xmlrpc::construct {} $arglist]
         aa_equals "int construction" $result "<i4>33</i4>"
 
         # array test
         set arglist {-array {
-            {-int 6682} 
-            {-boolean 0} 
-            {-text Iowa} 
-            {-double 8931.33333333} 
+            {-int 6682}
+            {-boolean 0}
+            {-text Iowa}
+            {-double 8931.33333333}
             {-date {Fri Jan 01 05:41:30 EST 1904}}}}
- 
+
         set result [xmlrpc::construct {} $arglist]
         aa_equals "array construction" $result "<array><data><value><i4>6682</i4></value><value><boolean>0</boolean></value><value><string>Iowa</string></value><value><double>8931.33333333</double></value><value><dateTime.iso8601>19040101T05:41:30</dateTime.iso8601></value></data></array>"
 
         # struct test
         set arglist {-struct {
-            ctLeftAngleBrackets {-int 5} 
-            ctRightAngleBrackets {-int 6} 
-            ctAmpersands {-int 7} 
-            ctApostrophes {-int 0} 
+            ctLeftAngleBrackets {-int 5}
+            ctRightAngleBrackets {-int 6}
+            ctAmpersands {-int 7}
+            ctApostrophes {-int 0}
             ctQuotes {-int 3}}}
-        
+
         set result [xmlrpc::construct {} $arglist]
         aa_equals "struct test" $result "<struct><member><name>ctLeftAngleBrackets</name><value><i4>5</i4></value></member><member><name>ctRightAngleBrackets</name><value><i4>6</i4></value></member><member><name>ctAmpersands</name><value><i4>7</i4></value></member><member><name>ctApostrophes</name><value><i4>0</i4></value></member><member><name>ctQuotes</name><value><i4>3</i4></value></member></struct>"
     }
@@ -208,3 +208,9 @@ aa_register_case -cats web xml_rpc_validate {
         }
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
