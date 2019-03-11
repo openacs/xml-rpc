@@ -60,7 +60,7 @@ proc validator1.countTheEntities {args} {
 # Return the sum of the values larry, curly and moe.
 
 proc validator1.easyStructTest {struct} {
-    # De-list-ify the stuct:
+    # De-list-ify the struct:
     array set bigStruct $struct
     # Return the sum as an integer:
     return [list -int [expr \

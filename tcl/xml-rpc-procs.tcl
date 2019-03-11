@@ -153,7 +153,7 @@ ad_proc -private xmlrpc::decode_value {
     node
 } {
     Unpack the data in a value element. Most value elements will have a
-    subnode describing the datatype (e.g &lt;string> or &lt;int>). If no
+    subnode describing the datatype (e.g. &lt;string> or &lt;int>). If no
     subnode is present, then we should assume the value is a string.
 
     @param node &lt;value> node that we're decoding
