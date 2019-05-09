@@ -152,9 +152,9 @@ package that needs to make XML-RPC calls can simply add a
 dependency to this package and then call
 <code>xmlrpc::remote_call</code>. As an example, the
 <code>system.add</code> method sums a variable number of ints. To
-call the <code>system.add</code> method on http://example.com/RPC2,
+call the <code>system.add</code> method on http://example.com/RPC2/,
 do this:</p><pre>
-catch {xmlrpc::remote_call http://example.com/RPC2 system.add -int 4 -int 44 -int 23} result
+catch {xmlrpc::remote_call http://example.com/RPC2/ system.add -int 4 -int 44 -int 23} result
 set result ==&gt; 71
 </pre><p>It&#39;s important to <strong>always</strong><code>catch</code>
 outgoing XML-RPC calls. If there&#39;s an error, it will be written
