@@ -96,7 +96,7 @@ proc validator1.manyTypesTest {
                [list -boolean $boolean] \
                [list -text $string] \
                [list -double $double] \
-               [list -date [clock format $dateTime]] \
+               [list -date [clock format $dateTime -format %Y%m%dT%T]] \
                [list -base64 $base64]]]
 }
 
