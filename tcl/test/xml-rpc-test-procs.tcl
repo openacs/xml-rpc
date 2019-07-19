@@ -10,7 +10,7 @@ aa_register_case -cats script xml_rpc_mounted {
     Test to make sure the xml-rpc package has been mounted
 } {
     aa_run_with_teardown -rollback -test_code {
-        aa_false "XML-RPC url not null" [empty_string_p [xmlrpc::url]]
+        aa_false "XML-RPC url not null" {[xmlrpc::url] eq ""}
     }
 }
 
