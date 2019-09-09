@@ -14,7 +14,7 @@ ad_page_contract {
 set rpc_url [ad_url][xmlrpc::url]
 set server_enabled_p [xmlrpc::enabled_p]
 
-multirow create rpc_procs name enabled_p
+multirow create rpc_procs name url enabled_p
 
 foreach proc_name [xmlrpc::list_methods] {
     if { $server_enabled_p } {
@@ -23,6 +23,5 @@ foreach proc_name [xmlrpc::list_methods] {
         set enabled_p No
     }
 
-    set proc_name [api_proc_link $proc_name]
-    multirow append rpc_procs $proc_name $enabled_p
+    multirow append rpc_procs $proc_name [api_proc_url $proc_name] $enabled_p
 }

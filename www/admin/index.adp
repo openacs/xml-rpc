@@ -27,7 +27,7 @@ The following procedures are registered:
 
 <multiple name="rpc_procs">
   <tr>
-    <td>@rpc_procs.name;noquote@</td> <td>@rpc_procs.enabled_p@</td>
+    <td><a href="@rpc_procs.url@">@rpc_procs.name@</a></td> <td>@rpc_procs.enabled_p@</td>
   </tr>
 </multiple>
 </table>
