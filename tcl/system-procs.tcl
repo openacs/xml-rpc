@@ -11,9 +11,9 @@ ad_library {
 ad_proc -public system.listMethods {} {
     Enumerate the methods implemented by the XML-RPC server.
 
-    The system.listMethods method requires no parameters. 
+    The system.listMethods method requires no parameters.
 
-    @return an array of strings, each of which is the name of a method 
+    @return an array of strings, each of which is the name of a method
     implemented by the server.
     @author Vinod Kurup
 } {
@@ -25,18 +25,18 @@ ad_proc -public system.listMethods {} {
     return [list -array $result]
 }
 
-# system.methodSignature not implemented because we don't keep track of 
+# system.methodSignature not implemented because we don't keep track of
 # parameter types or return types
 
 ad_proc -public system.methodHelp {
     methodName
-} {    
-    This method takes one parameter, the name of a method implemented by 
+} {
+    This method takes one parameter, the name of a method implemented by
     the XML-RPC server.
 
     @param methodName method implemented in XML-RPC
-    @return a documentation string describing the use of that method. 
-    If no such string is available, an empty string is returned. The 
+    @return a documentation string describing the use of that method.
+    If no such string is available, an empty string is returned. The
     documentation string may contain HTML markup.
     @author Vinod Kurup
 } {
@@ -47,22 +47,22 @@ ad_proc -public system.multicall {
     array
 } {
     <p>
-    Perform multiple requests in one call - see 
+    Perform multiple requests in one call - see
     http://www.xmlrpc.com/discuss/msgReader$1208
     </p>
 
     <p>
-    Takes an array of XML-RPC calls encoded as structs of the form (in a 
+    Takes an array of XML-RPC calls encoded as structs of the form (in a
     Pythonish notation here):
     <pre>
     {'methodName': string, 'params': array}
     </pre>
     </p>
     @param array  array of structs containing XML-RPC calls
-    @return an array of responses. There will be one response for each call 
-    in the original array. The result will either be a one-item array 
-    containing the result value - this mirrors the use of &lt;params> in 
-    &lt;methodResponse> - or a struct of the form found inside the 
+    @return an array of responses. There will be one response for each call
+    in the original array. The result will either be a one-item array
+    containing the result value - this mirrors the use of &lt;params> in
+    &lt;methodResponse> - or a struct of the form found inside the
     standard &lt;fault> element.
     @author Vinod Kurup
 } {
@@ -74,7 +74,7 @@ ad_proc -public system.multicall {
             array unset c
             array set c $call
             set method $c(methodName)
-            set params $c(params) 
+            set params $c(params)
         } errmsg ] } {
             # if we can't get a methodName and params, then fault
             lappend responses [list -struct \
