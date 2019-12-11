@@ -44,7 +44,9 @@ aa_register_case \
     }
 }
 
-ad_proc -private xmlrpc_decode_test_prep { value } {
+namespace eval xmlrpc::test {}
+
+ad_proc -private xmlrpc::test::decode_test_prep { value } {
     Takes the contents of a &lt;value> node, calls xmlrpc::decode_value and
     returns the result. This is done repeatedly in the xml_rpc_decode_value
     test, so I broke it out into a separate function for that purpose
@@ -66,44 +68,44 @@ aa_register_case \
         Test xmlrpc::decode_value to be sure it decodes properly
 } {
     aa_run_with_teardown -rollback -test_code {
-        set result [xmlrpc_decode_test_prep "<string>a string</string>"]
+        set result [xmlrpc::test::decode_test_prep "<string>a string</string>"]
         aa_equals "string test" $result "a string"
 
-        set result [xmlrpc_decode_test_prep "- a naked string"]
+        set result [xmlrpc::test::decode_test_prep "- a naked string"]
         aa_equals "naked string test" $result "- a naked string"
 
-        set result [xmlrpc_decode_test_prep "<int>22</int>"]
+        set result [xmlrpc::test::decode_test_prep "<int>22</int>"]
         aa_equals "int test" $result 22
 
-        set result [xmlrpc_decode_test_prep "<int>33</int>"]
+        set result [xmlrpc::test::decode_test_prep "<int>33</int>"]
         aa_equals "i4 test" $result 33
 
-        set result [xmlrpc_decode_test_prep "<double>3.1415</double>"]
+        set result [xmlrpc::test::decode_test_prep "<double>3.1415</double>"]
         aa_equals "double test" $result 3.1415
 
-        set result [xmlrpc_decode_test_prep "<boolean>1</boolean>"]
+        set result [xmlrpc::test::decode_test_prep "<boolean>1</boolean>"]
         aa_equals "boolean test 1" $result 1
 
-        set result [xmlrpc_decode_test_prep "<boolean>f</boolean>"]
+        set result [xmlrpc::test::decode_test_prep "<boolean>f</boolean>"]
         aa_equals "boolean test 2" $result 0
 
-        set result [xmlrpc_decode_test_prep "<dateTime.iso8601>20030821T083122</dateTime.iso8601>"]
+        set result [xmlrpc::test::decode_test_prep "<dateTime.iso8601>20030821T083122</dateTime.iso8601>"]
         aa_equals "date test" $result 1061469082
 
 
         unset result
-        array set result [xmlrpc_decode_test_prep "<struct><member><name>id</name><value><int>19</int></value></member><member><name>content</name><value><string>My content</string></value></member></struct>"]
+        array set result [xmlrpc::test::decode_test_prep "<struct><member><name>id</name><value><int>19</int></value></member><member><name>content</name><value><string>My content</string></value></member></struct>"]
         aa_equals "struct test 1" $result(id) 19
         aa_equals "struct test 2" $result(content) "My content"
 
         unset result
-        set result [xmlrpc_decode_test_prep "<array><data><value>phrase 1</value><value>2nd phrase</value><value>final phrase</value></data></array>"]
+        set result [xmlrpc::test::decode_test_prep "<array><data><value>phrase 1</value><value>2nd phrase</value><value>final phrase</value></data></array>"]
         aa_equals "array test 1" [lindex $result 0] "phrase 1"
         aa_equals "array test 2" [lindex $result 1] "2nd phrase"
         aa_equals "array test 3" [lindex $result 2] "final phrase"
 
         unset result
-        set result [xmlrpc_decode_test_prep "<array><data><value>phrase 1</value><value><struct><member><name>sublist</name><value><array><data><value>Got it!</value></data></array></value></member></struct></value></data></array>"]
+        set result [xmlrpc::test::decode_test_prep "<array><data><value>phrase 1</value><value><struct><member><name>sublist</name><value><array><data><value>Got it!</value></data></array></value></member></struct></value></data></array>"]
         array set struct [lindex $result 1]
         aa_equals "array inside struct inside array" [lindex $struct(sublist) 0] "Got it!"
     }
