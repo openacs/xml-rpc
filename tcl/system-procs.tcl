@@ -1,6 +1,6 @@
 # /packages/xml-rpc/tcl/system-procs.tcl
 ad_library {
-    Standard reserved nmethods
+    Standard reserved methods
     http://xmlrpc.usefulinc.com/doc/reserved.html
 
     @author Vinod Kurup [vinod@kurup.com]
