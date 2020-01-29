@@ -10,3 +10,9 @@ xmlrpc::register_proc system.listMethods
 xmlrpc::register_proc system.methodHelp
 xmlrpc::register_proc system.multicall
 xmlrpc::register_proc system.add
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

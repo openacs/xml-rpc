@@ -34,9 +34,9 @@ proc validator1.arrayOfStructsTest {params} {
 
 proc validator1.countTheEntities {args} {
     set string $args
-        
-    # For each type of entity, do a regsub -all and return the result as an 
-    # integer, then place it all in a struct with the proper names and return 
+
+    # For each type of entity, do a regsub -all and return the result as an
+    # integer, then place it all in a struct with the proper names and return
     # it.
 
     return \
@@ -192,7 +192,7 @@ proc validate1.echoStructTest {
 
 proc validate1.manyTypesTest {
     {url http://www.theashergroup.com/RPC2}
-    {int 1} 
+    {int 1}
     {boolean 0}
     {string wazzup}
     {double 3.14159}
@@ -250,7 +250,7 @@ proc validate1.nestedStructTest {
     {startyear 1999}
     {endyear 2001}
 } {
-    
+
     set calendar ""
     # for each year
     for {set y $startyear} {$y <= $endyear} {incr y} {
@@ -275,7 +275,7 @@ proc validate1.nestedStructTest {
                 if {$reald ne $dstr } {
                     break
                 }
-                
+
                 if {($y == 2000) && ($m == 4) && ($d == 1)} {
                     set dayta \
                         [list -struct \
@@ -293,7 +293,7 @@ proc validate1.nestedStructTest {
         }
         set calendar [concat $calendar   [list $y    [list -struct $year]]]
     }
-    
+
     return [xmlrpc::remote_call $url validator1.nestedStructTest -struct $calendar]
 }
 
@@ -305,3 +305,8 @@ proc validate1.simpleStructReturnTest {
     return [xmlrpc::remote_call $url validator1.simpleStructReturnTest -int $number]
 }
 
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

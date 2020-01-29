@@ -14,4 +14,9 @@ xmlrpc::register_proc validator1.manyTypesTest
 xmlrpc::register_proc validator1.moderateSizeArrayCheck
 xmlrpc::register_proc validator1.nestedStructTest
 xmlrpc::register_proc validator1.simpleStructReturnTest
- 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
