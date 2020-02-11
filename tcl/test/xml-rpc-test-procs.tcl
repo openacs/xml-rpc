@@ -201,7 +201,12 @@ aa_register_case -cats web xml_rpc_validate {
              nestedStructTest 7 \
              simpleStructReturnTest {times1000 2000 times100 200 times10 20}
         ]
-    set url [ad_url][xmlrpc::url]
+
+    set url [ad_url]
+    if {$url eq ""} {
+        set url [util_current_location]
+    }
+    set url $url[xmlrpc::url]
 
     aa_run_with_teardown -rollback -test_code {
         foreach {test_name expected} $test_list {
