@@ -184,7 +184,12 @@ aa_register_case \
 
 }
 
-aa_register_case -cats web xml_rpc_validate {
+aa_register_case -cats {
+    api
+    web
+} -procs {
+    xmlrpc::url
+} xml_rpc_validate {
     Test the standard XML-RPC validation suite
 } {
 
