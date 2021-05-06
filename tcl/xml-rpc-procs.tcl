@@ -80,7 +80,7 @@ ad_proc -private xmlrpc::get_content {} {
             append text [read $fp]
         }
         close $fp
-        file delete $filename
+        file delete -- $filename
     }
     return $text
 }
@@ -89,7 +89,7 @@ ad_proc -private xmlrpc::fault {
     code
     msg
 } {
-    Format a fault response to a XML-RPC request
+    Format a fault response to an XML-RPC request
 
     @param code  error code (integer)
     @param msg   error message
@@ -212,7 +212,7 @@ ad_proc -private xmlrpc::decode_value {
             }
         }
     } else {
-        # no datatype subnode, therefore it's a string
+        # no datatype subnode, therefore, it's a string
         set result [xml_node_get_content $node]
     }
     return $result
@@ -567,7 +567,7 @@ ad_proc -private xmlrpc::httppost {
 }
 
 ad_proc -private xmlrpc::parse_response {xml} {
-    Parse the response from a XML-RPC call.
+    Parse the response from an XML-RPC call.
 
     @param xml the XML response
     @return result
@@ -626,7 +626,7 @@ ad_proc -private xmlrpc::invoke {
         return $result
     }
 
-    # check that the provided XML is non-empty
+    # check that the provided XML is nonempty
     if { $xml eq "" } {
         set result [xmlrpc::fault 3 "Empty XML document passed to XML-RPC"]
         ns_log error "xmlrpc::invoke fault $result"
