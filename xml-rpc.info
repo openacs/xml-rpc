@@ -11,7 +11,7 @@
     <version name="0.3" url="http://openacs.org/repository/download/apm/xml-rpc-0.3.apm">
         <owner url="mailto:vinod@kurup.com">Vinod Kurup</owner>
         <summary>A simple XML-RPC server.</summary>
-        <release-date>2003-10-09</release-date>
+        <release-date>2021-05-06</release-date>
         <vendor url="http://kurup.org">Vinod Kurup</vendor>
         <description format="text/plain">This package implements a simple XML-RPC server. It receives XML-RPC calls, decodes the XML and then calls the requested method on the OpenACS server. Code is based on ns_xmlrpc, but now uses tDOM.</description>
 
