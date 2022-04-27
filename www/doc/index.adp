@@ -135,9 +135,9 @@ TCL variables.</li><li>
 <code>xmlrpc::invoke_method</code> checks to be sure the method
 is registered and then attempts to call the OpenACS proc</li><li>
 <code>xmlrpc::invoke</code> catches any errors from this
-attempt and creates a XML-RPC fault to return to the client if so.
+attempt and creates an XML-RPC fault to return to the client if so.
 If there was no error, then <code>xmlrpc::respond</code> is called
-to format the result as a XML-RPC response.</li><li>
+to format the result as an XML-RPC response.</li><li>
 <code>xmlrpc::construct</code> does the heavy work of
 converting the TCL results back into valid XML-RPC params</li><li>Finally, if no errors occur in this process, the result is
 returned to the client as text/xml</li>
