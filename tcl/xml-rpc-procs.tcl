@@ -465,7 +465,7 @@ ad_proc -private xmlrpc::create_context {
     Example:
     <pre>
     xmlrpc::create_context {param value} 78
-    returns ==> "<param><value>78</value></param>"
+    returns ==> "&lt;param>&lt;value&gt;78&lt;/value&gt;&lt;/param&gt;"
     </pre>
 
     @param context context to create
