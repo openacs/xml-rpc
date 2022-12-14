@@ -61,16 +61,7 @@ ad_proc -private xmlrpc::get_content {} {
         set text [ns_getcontent -as_file false -binary false]
     } else {
 
-        # (taken from aol30/modules/tcl/form.tcl)
-        # Spool content into a temporary read/write file.
-        # ns_openexcl can fail, since tmpnam is known not to
-        # be thread/process safe.  Hence spin till success
-        set fp ""
-        while {$fp eq ""} {
-            set filename "[ad_tmpnam][clock clicks -milliseconds].xmlrpc2"
-            set fp [ns_openexcl $filename]
-        }
-
+        set fp [ad_opentmpfile filename .xmlrpc2]
         fconfigure $fp -translation binary
         ns_conncptofp $fp
         close $fp
