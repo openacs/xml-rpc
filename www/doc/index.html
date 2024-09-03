@@ -49,7 +49,7 @@ methods the server supports.
 <p>
 The server is installed by default at /RPC2/. Administrators can change
 this by unmounting the package and remounting it at the desired URL. The
-server can be disabled or enabled via the /admin pages. 
+server can be disabled or enabled via the /admin pages.
 </p>
 
 <p>
@@ -76,7 +76,7 @@ OpenACS procs except for 2 differences.
   <li>
   They need to be able to <strong>accept arguments</strong> as sent to them
   from xmlrpc::decode
-  
+
   <p>
   In XML-RPC, every value has a datatype. Since TCL is a weakly-typed
   language, we could care less about the datatype (for the most part). So
@@ -88,7 +88,7 @@ OpenACS procs except for 2 differences.
   TCL arrays and XML-RPC arrays are sent as TCL lists. For example, if your
   proc expects a struct with 3 members (name, address and phone), then this
   is how the beginning of your proc will look.
-    
+
   <pre>
   array set user_info $struct
   set name $user_info(name)
@@ -98,16 +98,16 @@ OpenACS procs except for 2 differences.
 
   Or if your proc expects an array with n integers, which it then sums,
   then this is how your proc will look.
-    
+
   <pre>
   foreach num $array {
       incr sum $num
   }
   </pre>
-    
+
   </p>
   </li>
-    
+
   <li>
   They need to be able to <strong>return data</strong> that xmlrpc::respond
   will be able to translate to XML.
@@ -149,12 +149,12 @@ OpenACS procs except for 2 differences.
 
     <li>Returning an array of structs
     <pre>
-    set user1(name) {-string "George Bush"} 
+    set user1(name) {-string "George Bush"}
     set user1(id) {-int 41}
-    set user2(name) {-string "Bill Clinton"} 
+    set user2(name) {-string "Bill Clinton"}
     set user2(id) {-int 42}
-    return [list -array [list 
-                             [list -struct [array get user1]] 
+    return [list -array [list
+                             [list -struct [array get user1]]
                              [list -struct [array get user2]]]]
     </pre>
     </li>
@@ -223,7 +223,7 @@ More details are provided in the ad_proc documentation for each proc.
 This package also implements a simple XML-RPC client. Any package that
 needs to make XML-RPC calls can simply add a dependency to this package and
 then call <code>xmlrpc::remote_call</code>. As an example, the
-<code>system.add</code> method sums a variable number of ints. To call the 
+<code>system.add</code> method sums a variable number of ints. To call the
 <code>system.add</code> method on http://example.com/RPC2/, do this:
 <pre>
 catch {xmlrpc::remote_call http://example.com/RPC2/ system.add -int 4 -int 44 -int 23} result
@@ -257,11 +257,11 @@ virtual hosting. So, this package implements its own HTTP POST proc
 The first implementation of XML-RPC for AOLServer was ns_xmlrpc, whose credits
 state:
 <blockquote>
-	Ns_xml conversion by Dave Bauer (dave at thedesignexperience.org) with
-	help from Jerry Asher (jerry at theashergroup.com).  This code is based
-	on the original Tcl-RPC by Steve Ball with contributions by Aaron
-	Swartz. The original Tcl-RPC uses TclXML and TclDOM to parse the
-	XML. It works fine but since OpenACS-4 will use ns_xml I converted it.
+        Ns_xml conversion by Dave Bauer (dave at thedesignexperience.org) with
+        help from Jerry Asher (jerry at theashergroup.com).  This code is based
+        on the original Tcl-RPC by Steve Ball with contributions by Aaron
+        Swartz. The original Tcl-RPC uses TclXML and TclDOM to parse the
+        XML. It works fine but since OpenACS-4 will use ns_xml I converted it.
 </blockquote>
 </p>
 
