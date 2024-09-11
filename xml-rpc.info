@@ -8,14 +8,15 @@
     <singleton-p>t</singleton-p>
     <auto-mount>RPC2</auto-mount>
 
-    <version name="0.3" url="http://openacs.org/repository/download/apm/xml-rpc-0.3.apm">
+    <version name="0.4" url="http://openacs.org/repository/download/apm/xml-rpc-0.4.apm">
         <owner url="mailto:vinod@kurup.com">Vinod Kurup</owner>
         <summary>A simple XML-RPC server.</summary>
-        <release-date>2021-05-06</release-date>
+        <release-date>2024-09-02</release-date>
         <vendor url="http://kurup.org">Vinod Kurup</vendor>
         <description format="text/plain">This package implements a simple XML-RPC server. It receives XML-RPC calls, decodes the XML and then calls the requested method on the OpenACS server. Code is based on ns_xmlrpc, but now uses tDOM.</description>
+        <maturity>2</maturity>
 
-        <provides url="xml-rpc" version="0.3"/>
+        <provides url="xml-rpc" version="0.4"/>
         <requires url="acs-kernel" version="5.5.0"/>
 
         <callbacks>
