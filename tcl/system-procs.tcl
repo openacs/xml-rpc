@@ -71,7 +71,7 @@ ad_proc -public system.multicall {
     foreach call $array {
         # parse the call for methodName and params
         if { [catch {
-            array unset c
+            unset -nocomplain c
             array set c $call
             set method $c(methodName)
             set params $c(params)
