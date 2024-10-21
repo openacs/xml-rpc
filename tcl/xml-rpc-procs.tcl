@@ -462,11 +462,11 @@ ad_proc -private xmlrpc::create_context {
 } {
     Return the value wrapped in appropriate context tags. If context is
     a list of items, then the result will be wrapped in multiple tags.
+
     Example:
-    <pre>
+
     xmlrpc::create_context {param value} 78
-    returns ==> "<param><value>78</value></param>"
-    </pre>
+    returns ==> "&lt;param&gt;&lt;value&gt;78&lt;/value&gt;&lt;/param&gt;"
 
     @param context context to create
     @param value character data
