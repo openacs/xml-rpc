@@ -72,7 +72,7 @@ ad_proc -private xmlrpc::get_content {} {
         }
 
         fconfigure $fp -translation binary
-        ns_conncptofp $fp
+        ns_conn copy 0 [ns_conn contentlength] $fp
         close $fp
 
         set fp [open $filename r]
